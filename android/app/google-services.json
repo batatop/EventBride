@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "701509451518",
+    "firebase_url": "https://eventbride-f0a7a.firebaseio.com",
+    "project_id": "eventbride-f0a7a",
+    "storage_bucket": "eventbride-f0a7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701509451518:android:e596fa2fa8d16131",
+        "android_client_info": {
+          "package_name": "com.akimov.eventbride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701509451518-0ih4le6400logn74tsv2i6o6o9cro8e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgv6eU7gKD0BGBiK8xFCP9X5fbFJwDZAo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
