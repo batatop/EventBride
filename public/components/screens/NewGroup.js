@@ -24,7 +24,10 @@ export default class NewGroup extends React.Component {
 
         groupsRef.child(groupKey).set({
             groupName: this.state.groupName,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            groupUsers: {
+                [this.props.screenProps.user.uid]: true
+            }
         });
 
         userGroup[groupKey] = true

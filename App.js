@@ -14,6 +14,7 @@ import Events from './public/components/screens/Events';
 import NewEvent from './public/components/screens/NewEvent';
 import Chat from './public/components/screens/Chat';
 import Settings from './public/components/screens/Settings';
+import AddUser from './public/components/screens/AddUser';
 
 const AuthNavigator = StackNavigator(
   {
@@ -34,6 +35,7 @@ const GroupsNavigator = StackNavigator(
     Chat: { screen: Chat },
     NewGroup: { screen: NewGroup },
     NewEvent: { screen: NewEvent },
+    AddUser: { screen: AddUser },
   }
   ,
   {
@@ -66,7 +68,8 @@ const RootNavigator = DrawerNavigator(
         screenProps={{
           rootNavigation: navigation,
           user: screenProps.user,
-          groups: screenProps.groups
+          groups: screenProps.groups,
+          allUsers: screenProps.allUsers,
         }}
       />
     },
@@ -95,6 +98,7 @@ class App extends React.Component {
       loading: true,
       user: null,
       groups: null,
+      allUsers: null,
     });
   }
 
@@ -103,16 +107,19 @@ class App extends React.Component {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         let groups = []
-        let userRef = firebase.database().ref("users/" + user.uid)
+        let allUsersRef = firebase.database().ref("users")
+        let userRef = allUsersRef.child(user.uid)
         let userGroupsRef = userRef.child("groups")
         //LOADING
-        userGroupsRef.on("child_added", (snap) => {
-          let groupRef = firebase.database().ref('groups/' + snap.key)
-          groupRef.on('value', (snap) => {
-            let group = snap.val()
-            group.key = snap.key
+
+        // child_added to current user
+        userGroupsRef.on("child_added", (userGroupSnap) => {
+          let groupRef = firebase.database().ref('groups/' + userGroupSnap.key)
+          groupRef.on('value', (groupSnap) => {
+            let group = groupSnap.val()
+            group.key = groupSnap.key
             groups = groups.filter(function (group) {
-              return group.key != snap.key;
+              return group.key != groupSnap.key;
             });
             groups.push(group)
             self.setState({
@@ -120,6 +127,8 @@ class App extends React.Component {
             })
           })
         })
+
+        // child_removed from current user
         userGroupsRef.on("child_removed", (snap) => {
           firebase.database().ref('groups/' + snap.key).off()
           groups = groups.filter(function (group) {
@@ -129,6 +138,19 @@ class App extends React.Component {
             groups: groups,
           })
         })
+
+        // get (child_added) all users
+        allUsersRef.on("value", (snap) => {
+          let allUsers = []
+          snap.forEach(function (user) {
+            allUsers.push(user.val());
+          }); 
+          self.setState({
+            allUsers: allUsers,
+          })
+        })
+
+        // Stop loading
         self.setState({
           loading: false,
           user: user,
@@ -142,11 +164,12 @@ class App extends React.Component {
         })
       }
     });
+
   }
 
   render() {
     if (this.state.loading == false) {
-      return <RootNavigator screenProps={{ user: this.state.user, groups: this.state.groups }} />
+      return <RootNavigator screenProps={{ user: this.state.user, groups: this.state.groups, allUsers: this.state.allUsers }} />
     }
     else {
       return <Splash />

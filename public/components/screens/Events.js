@@ -15,12 +15,18 @@ export default class Events extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.state.params.groupInfo.groupName,
         headerRight: (
-            <TouchableHighlight
-                style={{ padding: 18 }}
-                onPress={() => navigation.navigate("NewEvent", { groupInfo: navigation.state.params.groupInfo })}
+            <IconContainer>
+                <HeaderIcon
+                    onPress={() => navigation.navigate("NewEvent", {groupInfo: navigation.state.params.groupInfo })}
             >
-                <Image source={require("../../assets/addIcon.png")} />
-            </TouchableHighlight>
+                    <Image source={require("../../assets/addIcon.png")} />
+                </HeaderIcon>
+                <HeaderIcon
+                    onPress={() => navigation.navigate("AddUser", { groupInfo: navigation.state.params.groupInfo })}
+            >
+                    <Image source={require("../../assets/addUserIcon.png")} />
+                </HeaderIcon>
+            </IconContainer>
         )
     });
 
@@ -62,6 +68,7 @@ export default class Events extends React.Component {
     }
     
     render() {
+        console
         return (
             <View flex={1} style={{backgroundColor: "#eff3f5"}}>
                 <FlatList
@@ -80,3 +87,13 @@ export default class Events extends React.Component {
         );
     }
 }
+
+const IconContainer = glamorous.view({
+    flexDirection: "row",
+    flex: 1,
+})
+
+const HeaderIcon = glamorous.touchableHighlight({
+    paddingTop: 18,
+    paddingRight: 18
+})

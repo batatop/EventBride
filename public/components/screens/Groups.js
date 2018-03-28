@@ -22,12 +22,13 @@ export default class Groups extends React.Component {
             </TouchableHighlight>
         ),
         headerRight: (
-            <TouchableHighlight
-                style={{ padding: 18 }}
-                onPress={() => navigation.navigate("NewGroup")}
-            >
-                <Image source={require("../../assets/addIcon.png")} />
-            </TouchableHighlight>
+            <IconContainer>
+                <HeaderIcon
+                    onPress={() => navigation.navigate("NewGroup")}
+                >
+                    <Image source={require("../../assets/addIcon.png")} />
+                </HeaderIcon>
+            </IconContainer>
         )
     });
 
@@ -67,3 +68,13 @@ export default class Groups extends React.Component {
         );
     }
 }
+
+const IconContainer = glamorous.view({
+    flexDirection: "row",
+    flex: 1,
+})
+
+const HeaderIcon = glamorous.touchableHighlight({
+    paddingTop: 18,
+    paddingRight: 18
+})
